@@ -1,0 +1,8 @@
+function.zip
+env.py
+cf_sink_connector/
+__pycache__
+response.json
+
+# Ignore all directories, and all sub-directories, and it's contents:
+**/
