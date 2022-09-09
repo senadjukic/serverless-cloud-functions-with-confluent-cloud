@@ -42,8 +42,12 @@ echo "env_producer_kafka_api_secret = \"$(terraform output -raw producer_kafka_a
 echo "env_topic_name = \"$(terraform output -raw topic_name)"\" >> $path_to_env_file
 ```
 
-**How to package for lambda deployment** <br>
-```pip3 install --target ./ confluent_kafka```
+**How to package Python packages for AWS Lambda deployment** <br>
+```
+pip3 install --target /c/work/serverless-cloud-funtions-with-confluent-cloud/aws-lambda-producer-to-confluent-cloud/python/ confluent_kafka
+
+pip3 install --target /c/work/serverless-cloud-funtions-with-confluent-cloud/aws-lambda-sink-connector-invocation/python/ requests
+```
 
 ## Usage
 

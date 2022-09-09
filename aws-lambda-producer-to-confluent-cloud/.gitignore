@@ -5,4 +5,3 @@ terraform.tfstate.backup
 .terraform.lock.hcl
 terraform.tfvars
 response.json
-function.zip
