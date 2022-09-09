@@ -9,6 +9,7 @@ This demo demonstrates how cloud functions can produce and consume from Confluen
 3. Check if you have Terraform installed `terraform -version` <br> https://learn.hashicorp.com/tutorials/terraform/install-cli#install-terraform
 4. Check if you have the Confluent CLI installed `confluent version` <br> https://docs.confluent.io/confluent-cli/current/install.html
 5. Check if you have the AWS CLI installed `aws --version` <br> https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+6. Create a Openweathermap Key for the OneCall API https://openweathermap.org/api (optional)
 
 ## Deployment
 1. Clone the repo and enter into the directory
@@ -52,12 +53,16 @@ pip3 install --target $PWD/serverless-cloud-funtions-with-confluent-cloud/aws-la
 
 pip3 install --target $PWD/serverless-cloud-funtions-with-confluent-cloud/aws-lambda-sink-connector-invocation/python/ requests
 ```
+7. Add your Openweather API key (optional)
+Either add your key: `echo 'env_openweather_key = "(your openweather key)"' > $PWD/serverless-cloud-functions-with-confluent-cloud/aws-lambda-sink-connector-invocation/python/env.py`
 
-7. `terraform -chdir=aws-lambda-producer-to-confluent-cloud/ init`
-8. `terraform -chdir=aws-lambda-producer-to-confluent-cloud/ apply -auto-approve`
+Or comment out the Openweather call in:  $PWD/serverless-cloud-functions-with-confluent-cloud/aws-lambda-sink-connector-invocation/python/index.py
 
-9. `terraform -chdir=aws-lambda-sink-connector-invocation/ init`
-10. `terraform -chdir=aws-lambda-sink-connector-invocation/ apply -auto-approve`
+8. `terraform -chdir=aws-lambda-producer-to-confluent-cloud/ init`
+9. `terraform -chdir=aws-lambda-producer-to-confluent-cloud/ apply -auto-approve`
+
+10. `terraform -chdir=aws-lambda-sink-connector-invocation/ init`
+11. `terraform -chdir=aws-lambda-sink-connector-invocation/ apply -auto-approve`
 
 ## Usage
 
@@ -85,11 +90,16 @@ aws lambda invoke \
 ```
 
 ## Deletion
+
+Via AWS CLI:
 ```
 aws lambda delete-function --function-name Producer_to_Confluent_Cloud_Lambda_Function
 
 aws lambda delete-function --function-name Connector_Sink_Lambda_Function
 
+Via Terraform:
+
+```
 terraform -chdir=aws-lambda-producer-to-confluent-cloud/ apply -auto-approve -destroy
 
 terraform -chdir=aws-lambda-sink-connector-invocation/ apply -auto-approve -destroy
