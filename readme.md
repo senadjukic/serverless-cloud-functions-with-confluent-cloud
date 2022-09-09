@@ -94,6 +94,7 @@ Via AWS CLI:
 aws lambda delete-function --function-name Producer_to_Confluent_Cloud_Lambda_Function
 
 aws lambda delete-function --function-name Connector_Sink_Lambda_Function
+```
 
 Via Terraform:
 
