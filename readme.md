@@ -21,7 +21,7 @@ git clone https://github.com/senadjukic/serverless-cloud-functions-with-confluen
 2. Create the terraform.tfvars with your credentials
 
 ```
-cat <<EOF >>$PWD/serverless-cloud-funtions-with-confluent-cloud/confluent-cloud-cluster/terraform.tfvars
+cat > $PWD/serverless-cloud-funtions-with-confluent-cloud/confluent-cloud-cluster/terraform.tfvars <<EOF
 confluent_cloud_api_key = "(see Confluent Cloud settings)"
 confluent_cloud_api_secret = "(see Confluent Cloud settings)"
 environment_name = "(your-name)-cloud-functions"
@@ -32,12 +32,12 @@ aws_secret_access_key = "(see AWS IAM)"
 lambda_sink_function_name = "Connector_Sink_Lambda_Function"
 EOF
 
-cat <<EOF >>$PWD/serverless-cloud-functions-with-confluent-cloud/aws-lambda-producer-to-confluent-cloud/terraform.tfvars
+cat > $PWD/serverless-cloud-functions-with-confluent-cloud/aws-lambda-producer-to-confluent-cloud/terraform.tfvars <<EOF
 lambda_sink_function_name = "(your-name)_Producer_to_Confluent_Cloud_Lambda_Function"
 owner_email = "(your-email@confluent.io)"
 EOF
 
-cat <<EOF >>$PWD/serverless-cloud-functions-with-confluent-cloud/aws-lambda-sink-connector-invocation/terraform.tfvars
+cat > $PWD/serverless-cloud-functions-with-confluent-cloud/aws-lambda-sink-connector-invocation/terraform.tfvars <<EOF
 lambda_sink_function_name = "(your-name)_Connector_Sink_Lambda_Function"
 owner_email = "(your-email@confluent.io)"
 EOF
@@ -48,7 +48,7 @@ EOF
 5. Create the input file for the Python variables
 
 ```
-cat <<EOF >>$PWD/serverless-cloud-funtions-with-confluent-cloud/aws-lambda-producer-to-confluent-cloud/python/env.py
+cat > $PWD/serverless-cloud-funtions-with-confluent-cloud/aws-lambda-producer-to-confluent-cloud/python/env.py <<EOF
 env_topic_name = "$(terraform output -raw topic_name)"
 env_cluster_bootstrap_endpoint = "$(terraform output -raw cluster_bootstrap_endpoint | cut -c 12-)"
 env_producer_kafka_api_key = "$(terraform output -raw producer_kafka_api_key)"
