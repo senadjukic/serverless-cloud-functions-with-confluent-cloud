@@ -22,7 +22,7 @@ git clone https://github.com/senadjukic/serverless-cloud-functions-with-confluen
 2. Create the terraform.tfvars with your credentials
 
 ```
-cat > $PWD/serverless-cloud-funtions-with-confluent-cloud/confluent-cloud-cluster/terraform.tfvars <<EOF
+cat > $PWD/confluent-cloud-cluster/terraform.tfvars <<EOF
 confluent_cloud_api_key = "(see Confluent Cloud settings)"
 confluent_cloud_api_secret = "(see Confluent Cloud settings)"
 environment_name = "(your-name)-cloud-functions"
@@ -33,12 +33,12 @@ aws_secret_access_key = "(see AWS IAM)"
 lambda_sink_function_name = "Connector_Sink_Lambda_Function"
 EOF
 
-cat > $PWD/serverless-cloud-functions-with-confluent-cloud/aws-lambda-producer-to-confluent-cloud/terraform.tfvars <<EOF
+cat > $PWD/aws-lambda-producer-to-confluent-cloud/terraform.tfvars <<EOF
 lambda_sink_function_name = "(your-name)_Producer_to_Confluent_Cloud_Lambda_Function"
 owner_email = "(your-email@confluent.io)"
 EOF
 
-cat > $PWD/serverless-cloud-functions-with-confluent-cloud/aws-lambda-sink-connector-invocation/terraform.tfvars <<EOF
+cat > $PWD/aws-lambda-sink-connector-invocation/terraform.tfvars <<EOF
 lambda_sink_function_name = "(your-name)_Connector_Sink_Lambda_Function"
 owner_email = "(your-email@confluent.io)"
 EOF
@@ -49,7 +49,7 @@ EOF
 5. Create the input file for the Python variables
 
 ```
-cat > $PWD/serverless-cloud-funtions-with-confluent-cloud/aws-lambda-producer-to-confluent-cloud/python/env.py <<EOF
+cat > $PWD/aws-lambda-producer-to-confluent-cloud/python/env.py <<EOF
 env_topic_name = "$(terraform output -raw topic_name)"
 env_cluster_bootstrap_endpoint = "$(terraform output -raw cluster_bootstrap_endpoint | cut -c 12-)"
 env_producer_kafka_api_key = "$(terraform output -raw producer_kafka_api_key)"
@@ -60,12 +60,12 @@ EOF
 
 6. Package Python packages for AWS Lambda deployment
 ```
-pip3 install --target $PWD/serverless-cloud-funtions-with-confluent-cloud/aws-lambda-producer-to-confluent-cloud/python/ confluent_kafka
+pip3 install --target $PWD/aws-lambda-producer-to-confluent-cloud/python/ confluent_kafka
 
-pip3 install --target $PWD/serverless-cloud-funtions-with-confluent-cloud/aws-lambda-sink-connector-invocation/python/ requests
+pip3 install --target $PWD/aws-lambda-sink-connector-invocation/python/ requests
 ```
 7. Optional: Add your Openweather API key
-`echo 'env_openweather_key = "(your openweather key)"' > $PWD/serverless-cloud-functions-with-confluent-cloud/aws-lambda-sink-connector-invocation/python/env.py`
+`echo 'env_openweather_key = "(your openweather key)"' > $PWD/aws-lambda-sink-connector-invocation/python/env.py`
 
 8. `terraform -chdir=aws-lambda-producer-to-confluent-cloud/ init`
 9. `terraform -chdir=aws-lambda-producer-to-confluent-cloud/ apply -auto-approve`
@@ -84,7 +84,7 @@ pip3 install --target $PWD/serverless-cloud-funtions-with-confluent-cloud/aws-la
 
 ```
 aws lambda invoke \
-    --function-name sjukic_Producer_to_Confluent_Cloud_Lambda_Function \
+    --function-name Producer_to_Confluent_Cloud_Lambda_Function \
     --payload '{"temperature_guess":"'"${RANDOM_TEMPERATURE}"'"}' \
     /dev/stdout | cat
 ``` 
@@ -93,7 +93,7 @@ Example value:
 
 ```
 aws lambda invoke \
-    --function-name sjukic_Producer_to_Confluent_Cloud_Lambda_Function \
+    --function-name Producer_to_Confluent_Cloud_Lambda_Function \
     --payload '{"temperature_guess":"25.5"}' \
     /dev/stdout | cat
 ```
