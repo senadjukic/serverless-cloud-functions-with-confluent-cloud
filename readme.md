@@ -10,6 +10,7 @@ This demo demonstrates how cloud functions can produce and consume from Confluen
 4. Check if you have the Confluent CLI installed `confluent version` <br> https://docs.confluent.io/confluent-cli/current/install.html
 5. Check if you have the AWS CLI installed `aws --version` <br> https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 6. Optional: Create a Openweathermap Key for the OneCall API: https://openweathermap.org/api
+7. Optional: Deploy standalone self-managed REST Proxy that talks to Confluent Cloud on Elastic Container Service: ./aws-ecs-rest-proxy-to-confluent-cloud/deploy-rest-proxy-on-ecs.sh This script deploys ECR, ECS and few other AWS resources to use REST calls by Cloud Functions or curl to interact with the Confluent Cloud Cluster.
 
 ## Deployment
 1. Clone the repo and enter into the directory

@@ -7,7 +7,8 @@
 # - deploy a REST Proxy that is connected to Confluent Cloud
 # - test if REST Proxy works as expected
 
-# get variables
+# MODIFY: add your variables
+cat > secret-vars.sh <<EOF
 export AWS_ACCESS_KEY_ID=
 export AWS_SECRET_ACCESS_KEY=
 export CC_BOOTSTRAP_SERVERS="pkc-xxxx.eu-central-1.aws.confluent.cloud:9092"
@@ -18,9 +19,10 @@ export image_version=7.2.1
 export ecs_cluster_name=rest-proxy-cluster
 export ecs_ecr_repo_name=ecs-rest-proxy
 export owner_email=xxxx@example.io
+EOF
 
-# optional: use vars from file
-# source secret-vars.sh
+# use vars from file
+source secret-vars.sh
 
 # create ECR repo
 aws ecr create-repository \
