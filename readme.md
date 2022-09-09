@@ -9,7 +9,7 @@ This demo demonstrates how cloud functions can produce and consume from Confluen
 3. Check if you have Terraform installed `terraform -version` <br> https://learn.hashicorp.com/tutorials/terraform/install-cli#install-terraform
 4. Check if you have the Confluent CLI installed `confluent version` <br> https://docs.confluent.io/confluent-cli/current/install.html
 5. Check if you have the AWS CLI installed `aws --version` <br> https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
-6. Optional: Create a Openweathermap Key for the OneCall API https://openweathermap.org/api
+6. Optional: Create a Openweathermap Key for the OneCall API: https://openweathermap.org/api
 
 ## Deployment
 1. Clone the repo and enter into the directory
@@ -18,18 +18,28 @@ git clone https://github.com/senadjukic/serverless-cloud-functions-with-confluen
 && cd serverless-cloud-functions-with-confluent-cloud 
 ```
 
-2. Create the terraform.tfvars for the cluster creation with your credentials
+2. Create the terraform.tfvars with your credentials
 
 ```
 cat <<EOF >>$PWD/serverless-cloud-funtions-with-confluent-cloud/confluent-cloud-cluster/terraform.tfvars
 confluent_cloud_api_key = "(see Confluent Cloud settings)"
 confluent_cloud_api_secret = "(see Confluent Cloud settings)"
-environment_name = "cloud-functions"
-cluster_name = "cf-basic"
+environment_name = "(your-name)-cloud-functions"
+cluster_name = "aws-basic"
 topic_name = "temperature"
 aws_access_key_id = "(see AWS IAM)"
 aws_secret_access_key = "(see AWS IAM)"
 lambda_sink_function_name = "Connector_Sink_Lambda_Function"
+EOF
+
+cat <<EOF >>$PWD/serverless-cloud-functions-with-confluent-cloud/aws-lambda-producer-to-confluent-cloud/terraform.tfvars
+lambda_sink_function_name = "(your-name)_Producer_to_Confluent_Cloud_Lambda_Function"
+owner_email = "(your-email@confluent.io)"
+EOF
+
+cat <<EOF >>$PWD/serverless-cloud-functions-with-confluent-cloud/aws-lambda-sink-connector-invocation/terraform.tfvars
+lambda_sink_function_name = "(your-name)_Connector_Sink_Lambda_Function"
+owner_email = "(your-email@confluent.io)"
 EOF
 ```
 
