@@ -10,12 +10,15 @@ This demo demonstrates how cloud functions can produce and consume from Confluen
 4. Follow https://registry.terraform.io/providers/confluentinc/confluent/latest/docs/guides/sample-project#create-a-cloud-api-key
 
 ## Deployment
-1. cd confluent-cloud-cluster
-2. create terraform.vars file with your credentials
+1. ``` 
+git clone https://github.com/senadjukic/serverless-cloud-functions-with-confluent-cloud.git \
+&& cd serverless-cloud-functions-with-confluent-cloud 
+```
+
+2. create terraform.tfvars for the cluster creation with your credentials
 
 ```
-touch terraform.tfvars
-
+cat <<EOF >>$PWD/serverless-cloud-funtions-with-confluent-cloud/confluent-cloud-cluster/terraform.tfvars
 confluent_cloud_api_key = "(see Confluent Cloud settings)"
 confluent_cloud_api_secret = "(see Confluent Cloud settings)"
 environment_name = "cloud-functions"
@@ -24,30 +27,35 @@ topic_name = "temperature"
 aws_access_key_id = "(see AWS IAM)"
 aws_secret_access_key = "(see AWS IAM)"
 lambda_sink_function_name = "Connector_Sink_Lambda_Function"
+EOF
 ```
 
-3. `terraform init`
-4. `terraform apply -auto-approve`
+3. `terraform -chdir=confluent-cloud-cluster/ init`
+4. `terraform -chdir=confluent-cloud-cluster/ apply -auto-approve`
 5. create input file for python vars (change path_to_env_file)
 
 ```
-export path_to_env_file="/c/work/serverless-cloud-funtions-with-confluent-cloud/aws-lambda-producer-to-confluent-cloud/python/env.py"
-
-echo "env_cluster_bootstrap_endpoint = \"$(terraform output -raw cluster_bootstrap_endpoint | cut -c 12-)"\" > $path_to_env_file
-
-echo "env_producer_kafka_api_key = \"$(terraform output -raw producer_kafka_api_key)"\" >> $path_to_env_file
-
-echo "env_producer_kafka_api_secret = \"$(terraform output -raw producer_kafka_api_secret)"\" >> $path_to_env_file
-
-echo "env_topic_name = \"$(terraform output -raw topic_name)"\" >> $path_to_env_file
+cat <<EOF >>$PWD/serverless-cloud-funtions-with-confluent-cloud/aws-lambda-producer-to-confluent-cloud/python/env.py
+env_topic_name = "$(terraform output -raw topic_name)"
+env_cluster_bootstrap_endpoint = "$(terraform output -raw cluster_bootstrap_endpoint | cut -c 12-)"
+env_producer_kafka_api_key = "$(terraform output -raw producer_kafka_api_key)"
+env_producer_kafka_api_secret = "$(terraform output -raw producer_kafka_api_secret)"
+env_topic_name = "$(terraform output -raw topic_name)"
+EOF
 ```
 
-**How to package Python packages for AWS Lambda deployment** <br>
+6. Package Python packages for AWS Lambda deployment
 ```
-pip3 install --target /c/work/serverless-cloud-funtions-with-confluent-cloud/aws-lambda-producer-to-confluent-cloud/python/ confluent_kafka
+pip3 install --target $PWD/serverless-cloud-funtions-with-confluent-cloud/aws-lambda-producer-to-confluent-cloud/python/ confluent_kafka
 
-pip3 install --target /c/work/serverless-cloud-funtions-with-confluent-cloud/aws-lambda-sink-connector-invocation/python/ requests
+pip3 install --target $PWD/serverless-cloud-funtions-with-confluent-cloud/aws-lambda-sink-connector-invocation/python/ requests
 ```
+
+7. `terraform -chdir=aws-lambda-producer-to-confluent-cloud/ init`
+8. `terraform -chdir=aws-lambda-producer-to-confluent-cloud/ apply -auto-approve`
+
+9. `terraform -chdir=aws-lambda-sink-connector-invocation/ init`
+10. `terraform -chdir=aws-lambda-sink-connector-invocation/ apply -auto-approve`
 
 ## Usage
 
@@ -62,7 +70,7 @@ pip3 install --target /c/work/serverless-cloud-funtions-with-confluent-cloud/aws
 aws lambda invoke \
     --function-name sjukic_Producer_to_Confluent_Cloud_Lambda_Function \
     --payload '{"temperature_guess":"'"${RANDOM_TEMPERATURE}"'"}' \
-    response.json
+    /dev/stdout | cat
 ``` 
 
 Example value:
@@ -71,7 +79,7 @@ Example value:
 aws lambda invoke \
     --function-name sjukic_Producer_to_Confluent_Cloud_Lambda_Function \
     --payload '{"temperature_guess":"25.5"}' \
-    response.json
+    /dev/stdout | cat
 ```
 
 **How to delete the function?** <br>
