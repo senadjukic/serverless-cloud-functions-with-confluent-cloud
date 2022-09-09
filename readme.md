@@ -4,10 +4,11 @@
 This demo demonstrates how cloud functions can produce and consume from Confluent Cloud. The current examples are with AWS Lambda and are baked by Terraform.
 
 ## Prerequisites
-1. Check if you have Confluent Cloud Account
-2. Check if you have Terraform https://learn.hashicorp.com/tutorials/terraform/install-cli#install-terraform
-3. Check if you have Confluent CLI & AWS CLI
-4. Create Confluent Cloud API keys https://registry.terraform.io/providers/confluentinc/confluent/latest/docs/guides/sample-project#create-a-cloud-api-key
+1. Check if you have a Confluent Cloud Account
+2. Create Confluent Cloud API keys https://registry.terraform.io/providers/confluentinc/confluent/latest/docs/guides/sample-project#create-a-cloud-api-key
+3. Check if you have Terraform installed `terraform -version` https://learn.hashicorp.com/tutorials/terraform/install-cli#install-terraform
+4. Check if you have the Confluent CLI installed `confluent version` https://docs.confluent.io/confluent-cli/current/install.html
+5. Check if you have the AWS CLI installed `aws --version` https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 
 ## Deployment
 1. 
