@@ -6,11 +6,12 @@ This demo demonstrates how cloud functions can produce and consume from Confluen
 ## Prerequisites
 1. Check if you have Confluent Cloud Account
 2. Check if you have Terraform https://learn.hashicorp.com/tutorials/terraform/install-cli#install-terraform
-3. Check if you have Confluent CLI
-4. Follow https://registry.terraform.io/providers/confluentinc/confluent/latest/docs/guides/sample-project#create-a-cloud-api-key
+3. Check if you have Confluent CLI & AWS CLI
+4. Create Confluent Cloud API keys https://registry.terraform.io/providers/confluentinc/confluent/latest/docs/guides/sample-project#create-a-cloud-api-key
 
 ## Deployment
-1. ``` 
+1. 
+``` 
 git clone https://github.com/senadjukic/serverless-cloud-functions-with-confluent-cloud.git \
 && cd serverless-cloud-functions-with-confluent-cloud 
 ```
