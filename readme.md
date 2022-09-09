@@ -11,13 +11,13 @@ This demo demonstrates how cloud functions can produce and consume from Confluen
 5. Check if you have the AWS CLI installed `aws --version` <br> https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 
 ## Deployment
-1. 
+1. Clone the repo and enter into the directory
 ``` 
 git clone https://github.com/senadjukic/serverless-cloud-functions-with-confluent-cloud.git \
 && cd serverless-cloud-functions-with-confluent-cloud 
 ```
 
-2. create terraform.tfvars for the cluster creation with your credentials
+2. Create the terraform.tfvars for the cluster creation with your credentials
 
 ```
 cat <<EOF >>$PWD/serverless-cloud-funtions-with-confluent-cloud/confluent-cloud-cluster/terraform.tfvars
@@ -34,7 +34,7 @@ EOF
 
 3. `terraform -chdir=confluent-cloud-cluster/ init`
 4. `terraform -chdir=confluent-cloud-cluster/ apply -auto-approve`
-5. create input file for python vars (change path_to_env_file)
+5. Create the input file for the Python variables
 
 ```
 cat <<EOF >>$PWD/serverless-cloud-funtions-with-confluent-cloud/aws-lambda-producer-to-confluent-cloud/python/env.py
@@ -84,7 +84,16 @@ aws lambda invoke \
     /dev/stdout | cat
 ```
 
-**How to delete the function?** <br>
-```aws lambda delete-function --function-name Producer_to_Confluent_Cloud_Lambda_Function``` <br>
-```aws lambda delete-function --function-name Connector_Sink_Lambda_Function```
+## Deletion
+```
+aws lambda delete-function --function-name Producer_to_Confluent_Cloud_Lambda_Function
+
+aws lambda delete-function --function-name Connector_Sink_Lambda_Function
+
+terraform -chdir=aws-lambda-producer-to-confluent-cloud/ apply -auto-approve -destroy
+
+terraform -chdir=aws-lambda-sink-connector-invocation/ apply -auto-approve -destroy
+
+terraform -chdir=confluent-cloud-cluster/ apply -auto-approve -destroy
+```
 
